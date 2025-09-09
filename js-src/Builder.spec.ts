@@ -196,6 +196,7 @@ describe("Builder", () => {
 
     it("should sign data", async () => {
       const dest = { path: path.join(tempDir, "signed.jpg") };
+      await Promise.resolve();
       const signer = LocalSigner.newSigner(publicKey, privateKey, "es256");
 
       const bytes = builder.sign(signer, source, dest);

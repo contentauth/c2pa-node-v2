@@ -158,6 +158,7 @@ describe("Reader", () => {
   });
 
   it("should read from a file", async () => {
+    await Promise.resolve();
     const reader = await Reader.fromAsset({
       path: "./tests/fixtures/CAI.jpg",
     });
@@ -194,6 +195,7 @@ describe("Reader", () => {
   it("should write to a file", async () => {
     let bytesWritten = 0;
     const outputPath = path.join(tempDir, "thumbnail.jpg");
+    await Promise.resolve();
     const reader = await Reader.fromAsset({
       path: "./tests/fixtures/CAI.jpg",
     });
@@ -210,6 +212,7 @@ describe("Reader", () => {
   });
 
   it("should report manifest is embedded", async () => {
+    await Promise.resolve();
     const reader = await Reader.fromAsset({
       path: "./tests/fixtures/CAI.jpg",
     });
@@ -218,6 +221,7 @@ describe("Reader", () => {
   });
 
   it("should report manifest is not embedded", async () => {
+    await Promise.resolve();
     const reader = await Reader.fromAsset({
       path: "./tests/fixtures/cloud.jpg",
     });

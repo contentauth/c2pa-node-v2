@@ -97,6 +97,7 @@ describe("Trustmark", () => {
   describe("encode", () => {
     it("should encode a watermark into an image with default watermark", async () => {
       const strength = 0.9;
+      await Promise.resolve();
       const encodedImage = await trustmark.encode(testImage, strength);
 
       expect(encodedImage).toBeDefined();
@@ -109,6 +110,7 @@ describe("Trustmark", () => {
     it("should encode a watermark into an image with custom watermark", async () => {
       const strength = 0.95;
       const customWatermark = "0101000011001";
+      await Promise.resolve();
       const encodedImage = await trustmark.encode(
         testImage,
         strength,
@@ -131,6 +133,7 @@ describe("Trustmark", () => {
 
     it("should throw error with empty image buffer", async () => {
       const emptyBuffer = Buffer.alloc(0);
+      await Promise.resolve();
       await expect(trustmark.encode(emptyBuffer, 0.5)).rejects.toThrow(
         "The image format could not be determined",
       );
@@ -143,6 +146,7 @@ describe("Trustmark", () => {
       const customWatermark = "0101000011001";
 
       // First encode a watermark
+      await Promise.resolve();
       const rawPixelData = await trustmark.encode(
         testImage,
         strength,
@@ -170,6 +174,7 @@ describe("Trustmark", () => {
       const strength = 0.75;
 
       // Encode with default watermark
+      await Promise.resolve();
       const rawPixelData = await trustmark.encode(testImage, strength);
 
       // Convert raw pixel data to JPEG format for decoding
@@ -189,6 +194,7 @@ describe("Trustmark", () => {
 
     it("should throw error decoding from original image (no watermark)", async () => {
       // Try to decode from an image that hasn't been watermarked
+      await Promise.resolve();
       await expect(trustmark.decode(testImage)).rejects.toThrow(
         "watermark is corrupt or missing",
       );
@@ -196,6 +202,7 @@ describe("Trustmark", () => {
 
     it("should throw error with empty image buffer", async () => {
       const emptyBuffer = Buffer.alloc(0);
+      await Promise.resolve();
       await expect(trustmark.decode(emptyBuffer)).rejects.toThrow(
         "The image format could not be determined",
       );
