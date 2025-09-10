@@ -16,12 +16,14 @@ use neon::prelude::*;
 mod asset;
 mod error;
 mod runtime;
+mod settings;
 mod utils;
 
 pub mod neon_builder;
 pub mod neon_identity_assertion_builder;
 pub mod neon_identity_assertion_signer;
 pub mod neon_reader;
+pub mod neon_settings;
 pub mod neon_signer;
 pub mod neon_trustmark;
 
@@ -159,6 +161,21 @@ fn main(mut cx: ModuleContext) -> NeonResult<()> {
     )?;
     cx.export_function("trustmarkEncode", neon_trustmark::NeonTrustmark::encode)?;
     cx.export_function("trustmarkDecode", neon_trustmark::NeonTrustmark::decode)?;
+
+    // Settings
+    cx.export_function("settingsFromToml", neon_settings::NeonSettings::from_toml)?;
+    cx.export_function("settingsFromFile", neon_settings::NeonSettings::from_file)?;
+    cx.export_function("settingsFromUrl", neon_settings::NeonSettings::from_url)?;
+    cx.export_function("settingsSetValue", neon_settings::NeonSettings::set_value)?;
+    cx.export_function("settingsGetValue", neon_settings::NeonSettings::get_value)?;
+    cx.export_function("settingsToJson", neon_settings::NeonSettings::to_json)?;
+    cx.export_function("settingsClear", neon_settings::NeonSettings::clear)?;
+    cx.export_function("settingsSetTrustAnchors", neon_settings::NeonSettings::set_trust_anchors)?;
+    cx.export_function("settingsSetUserAnchors", neon_settings::NeonSettings::set_user_anchors)?;
+    cx.export_function("settingsSetCertificateList", neon_settings::NeonSettings::set_certificate_list)?;
+    cx.export_function("settingsSetTrustConfig", neon_settings::NeonSettings::set_trust_config)?;
+    cx.export_function("settingsEnableTrustVerification", neon_settings::NeonSettings::enable_trust_verification)?;
+    cx.export_function("settingsDisableTrustVerification", neon_settings::NeonSettings::disable_trust_verification)?;
 
     Ok(())
 }

@@ -82,14 +82,18 @@ impl Asset {
 }
 
 pub fn parse_asset(cx: &mut FunctionContext, obj: Handle<JsObject>) -> NeonResult<Asset> {
-    let mime_type = obj
-        .get_opt::<JsString, _, _>(cx, "mimeType")?
-        .map(|val| val.value(cx))
-        .or(None);
-    let path = obj
-        .get_opt::<JsString, _, _>(cx, "path")?
-        .map(|val| val.value(cx))
-        .or(None);
+    let mime_type = match obj.get_opt::<JsString, _, _>(cx, "mimeType")? {
+        Some(val) if !val.is_a::<JsUndefined, _>(cx) && !val.is_a::<JsNull, _>(cx) => {
+            Some(val.value(cx))
+        }
+        _ => None,
+    };
+    let path = match obj.get_opt::<JsString, _, _>(cx, "path")? {
+        Some(val) if !val.is_a::<JsUndefined, _>(cx) && !val.is_a::<JsNull, _>(cx) => {
+            Some(val.value(cx))
+        }
+        _ => None,
+    };
     let buffer_value = obj.get::<JsValue, _, _>(cx, "buffer")?;
     let buffer = if buffer_value.is_a::<JsBuffer, _>(cx) {
         Some(

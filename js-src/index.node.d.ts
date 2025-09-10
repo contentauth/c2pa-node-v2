@@ -146,4 +146,19 @@ declare module "index.node" {
     watermark?: string,
   ): Promise<Buffer>;
   export function trustmarkDecode(image: Buffer): Promise<string>;
+
+  // Settings
+  export function settingsFromToml(tomlStr: string): Promise<void>;
+  export function settingsFromFile(filePath: string): Promise<void>;
+  export function settingsFromUrl(url: string): Promise<void>;
+  export function settingsSetValue(key: string, value: string | boolean | number | null): Promise<void>;
+  export function settingsGetValue(key: string): string | boolean | number | undefined;
+  export function settingsToJson(): Promise<string>;
+  export function settingsClear(): Promise<void>;
+  export function settingsSetTrustAnchors(anchors: string): Promise<void>;
+  export function settingsSetUserAnchors(anchors: string): Promise<void>;
+  export function settingsSetCertificateList(certificateList: string): Promise<void>;
+  export function settingsSetTrustConfig(config: string): Promise<void>;
+  export function settingsEnableTrustVerification(): Promise<void>;
+  export function settingsDisableTrustVerification(): Promise<void>;
 }

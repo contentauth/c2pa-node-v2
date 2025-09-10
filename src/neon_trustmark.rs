@@ -46,25 +46,17 @@ pub fn parse_watermark_config(
     cx: &mut FunctionContext,
     obj: Handle<JsObject>,
 ) -> NeonResult<WatermarkConfig> {
-    let variant_str = match obj
-        .get_opt::<JsString, _, _>(cx, "variant")?
-        .map(|val| val.value(cx))
-    {
-        Some(val) => val,
-        None => return cx.throw_error("Watermark configuration error: missing variant"),
-    };
+    let variant_str = obj
+        .get::<JsString, _, _>(cx, "variant")?
+        .value(cx);
 
     let variant: Variant = variant_str
         .parse()
         .or_else(|_| cx.throw_error("Watermark configuration error: invalid variant"))?;
 
-    let version_str = match obj
-        .get_opt::<JsString, _, _>(cx, "version")?
-        .map(|val| val.value(cx))
-    {
-        Some(val) => val,
-        None => return cx.throw_error("Watermark configuration error: missing version"),
-    };
+    let version_str = obj
+        .get::<JsString, _, _>(cx, "version")?
+        .value(cx);
 
     let version: Version = version_str.parse().or_else(|_| {
         cx.throw_error(format!(
@@ -72,10 +64,12 @@ pub fn parse_watermark_config(
         ))
     })?;
 
-    let model_path: std::path::PathBuf = obj
-        .get_opt::<JsString, _, _>(cx, "modelPath")?
-        .map(|val| std::path::PathBuf::from(val.value(cx)))
-        .unwrap_or_else(|| PathBuf::from("./models"));
+    let model_path: std::path::PathBuf = match obj.get_opt::<JsString, _, _>(cx, "modelPath")? {
+        Some(val) if !val.is_a::<JsUndefined, _>(cx) && !val.is_a::<JsNull, _>(cx) => {
+            std::path::PathBuf::from(val.value(cx))
+        }
+        _ => PathBuf::from("./models"),
+    };
 
     Ok(WatermarkConfig {
         variant,

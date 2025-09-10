@@ -81,9 +81,12 @@ impl CallbackSignerConfig {
             .or_else(|err| cx.throw_error(err.to_string()))?;
 
         // Handle certs as an optional array of buffers
-        let certs_array = js_config
-            .get::<JsArray, _, _>(cx, "certs")?
-            .downcast_or_throw::<JsArray, _>(cx)?;
+        let certs_array = match js_config.get_opt::<JsValue, _, _>(cx, "certs")? {
+            Some(val) if !val.is_a::<JsUndefined, _>(cx) && !val.is_a::<JsNull, _>(cx) => {
+                val.downcast_or_throw::<JsArray, _>(cx)?
+            }
+            _ => JsArray::new(cx, 0),
+        };
         let mut certs = Vec::new();
         for i in 0..certs_array.len(cx) {
             let cert_buffer = certs_array
@@ -95,19 +98,22 @@ impl CallbackSignerConfig {
         let reserve_size = js_config
             .get::<JsNumber, _, _>(cx, "reserveSize")?
             .value(cx) as usize;
-        let tsa_url = js_config
-            .get_opt::<JsString, _, _>(cx, "tsaUrl")?
-            .map(|js_string| js_string.value(cx));
+        let tsa_url = match js_config.get_opt::<JsString, _, _>(cx, "tsaUrl")? {
+            Some(val) if !val.is_a::<JsUndefined, _>(cx) && !val.is_a::<JsNull, _>(cx) => {
+                Some(val.value(cx))
+            }
+            _ => None,
+        };
         let direct_cose_handling = js_config
             .get::<JsBoolean, _, _>(cx, "directCoseHandling")?
             .downcast_or_throw::<JsBoolean, _>(cx)?
             .value(cx);
-        let tsa_headers =
-            if let Some(js_array) = js_config.get_opt::<JsArray, _, _>(cx, "tsaHeaders")? {
-                let len = js_array.len(cx);
+        let tsa_headers = match js_config.get_opt::<JsArray, _, _>(cx, "tsaHeaders")? {
+            Some(val) if !val.is_a::<JsUndefined, _>(cx) && !val.is_a::<JsNull, _>(cx) => {
+                let len = val.len(cx);
                 let mut headers = Vec::new();
                 for i in 0..len {
-                    let js_tuple = js_array
+                    let js_tuple = val
                         .get::<JsArray, _, _>(cx, i)?
                         .downcast_or_throw::<JsArray, _>(cx)?;
                     let key = js_tuple
@@ -119,12 +125,15 @@ impl CallbackSignerConfig {
                     headers.push((key.value(cx), value.value(cx)));
                 }
                 Some(headers)
-            } else {
-                None
-            };
-        let tsa_body = js_config
-            .get_opt::<JsBuffer, _, _>(cx, "tsaBody")?
-            .map(|js_buffer| js_buffer.as_slice(cx).to_vec());
+            }
+            _ => None,
+        };
+        let tsa_body = match js_config.get_opt::<JsBuffer, _, _>(cx, "tsaBody")? {
+            Some(val) if !val.is_a::<JsUndefined, _>(cx) && !val.is_a::<JsNull, _>(cx) => {
+                Some(val.as_slice(cx).to_vec())
+            }
+            _ => None,
+        };
 
         Ok(cx.boxed(Self::new(
             alg,

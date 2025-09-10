@@ -540,6 +540,7 @@ dependencies = [
  "image",
  "neon",
  "neon-serde4",
+ "once_cell",
  "pem",
  "rand 0.8.5",
  "reqwest",
@@ -549,7 +550,9 @@ dependencies = [
  "thiserror 1.0.69",
  "tokio",
  "tokio-util",
+ "toml",
  "trustmark",
+ "url",
 ]
 
 [[package]]

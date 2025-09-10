@@ -34,3 +34,7 @@ tokio = { version = "1.43.0", features = ["rt-multi-thread"] }
 tokio-util = "0.7.13"
 trustmark = "0.2"
 rand = "0.8.5"
+# Settings support dependencies
+toml = "0.8"
+url = "2.5"
+once_cell = "1.19"

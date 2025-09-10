@@ -348,3 +348,122 @@ export interface TrustmarkConfig {
   version: TrustmarkVersion;
   modelPath?: string;
 }
+
+/**
+ * Trust settings configuration
+ */
+export interface TrustSettings {
+  /** User-provided trust anchors (PEM format) */
+  user_anchors?: string;
+  /** System trust anchors (PEM format) */
+  trust_anchors?: string;
+  /** Trust configuration file path or content */
+  trust_config?: string;
+  /** Certificate list (PEM format) */
+  certificate_list?: string;
+}
+
+/**
+ * Verification settings configuration
+ */
+export interface VerifySettings {
+  /** Verify manifests after reading */
+  verify_after_reading?: boolean;
+  /** Verify trust lists */
+  verify_trust?: boolean;
+  /** Check ingredient trust */
+  check_ingredient_trust?: boolean;
+  /** Verify timestamp trust */
+  verify_timestamp_trust?: boolean;
+}
+
+/**
+ * Complete settings configuration
+ */
+export interface Settings {
+  /** Trust settings for certificate validation */
+  trust?: TrustSettings;
+  /** Verification behavior settings */
+  verify?: VerifySettings;
+}
+
+/**
+ * Settings API for configuring C2PA behavior
+ */
+export interface SettingsInterface {
+  /**
+   * Load settings from a TOML string
+   * @param tomlStr TOML configuration string
+   */
+  fromToml(tomlStr: string): Promise<void>;
+
+  /**
+   * Load settings from a file
+   * @param filePath Path to the settings file
+   */
+  fromFile(filePath: string): Promise<void>;
+
+  /**
+   * Load settings from a URL
+   * @param url URL to fetch settings from
+   */
+  fromUrl(url: string): Promise<void>;
+
+  /**
+   * Set a specific setting value
+   * @param key Setting key (e.g., "trust.trust_anchors")
+   * @param value Setting value
+   */
+  setValue(key: string, value: string | boolean | number | null): Promise<void>;
+
+  /**
+   * Get a specific setting value
+   * @param key Setting key
+   * @returns Setting value or undefined if not found
+   */
+  getValue(key: string): string | boolean | number | undefined;
+
+  /**
+   * Get all settings as a JSON string
+   */
+  toJson(): Promise<string>;
+
+  /**
+   * Clear all settings
+   */
+  clear(): Promise<void>;
+
+  /**
+   * Set trust anchors
+   * @param anchors Trust anchors in PEM format
+   */
+  setTrustAnchors(anchors: string): Promise<void>;
+
+  /**
+   * Set user trust anchors
+   * @param anchors User trust anchors in PEM format
+   */
+  setUserAnchors(anchors: string): Promise<void>;
+
+  /**
+   * Set certificate list
+   * @param certificateList Certificates in PEM format
+   */
+  setCertificateList(certificateList: string): Promise<void>;
+
+  /**
+   * Set trust configuration
+   * @param config Trust configuration content
+   */
+  setTrustConfig(config: string): Promise<void>;
+
+  /**
+   * Enable trust verification
+   */
+  enableTrustVerification(): Promise<void>;
+
+  /**
+   * Disable trust verification
+   */
+  disableTrustVerification(): Promise<void>;
+}
