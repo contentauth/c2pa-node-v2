@@ -12,7 +12,7 @@
 // each license.
 
 use crate::asset::parse_asset;
-use crate::error::{as_js_error, Error};
+use crate::error::{Error, as_js_error};
 use crate::neon_identity_assertion_signer::NeonIdentityAssertionSigner;
 use crate::neon_signer::{CallbackSignerConfig, NeonCallbackSigner, NeonLocalSigner};
 use crate::runtime::runtime;
@@ -310,7 +310,7 @@ impl NeonBuilder {
                         match output_stream.rewind() {
                             Ok(_) => (),
                             Err(e) => {
-                                return cx.throw_error(format!("Failed to rewind stream: {e}"))
+                                return cx.throw_error(format!("Failed to rewind stream: {e}"));
                             }
                         }
                         match output_stream.read_to_end(&mut buffer) {
@@ -381,7 +381,7 @@ impl NeonBuilder {
                         match output_stream.rewind() {
                             Ok(_) => (),
                             Err(e) => {
-                                return cx.throw_error(format!("Failed to rewind stream: {e}"))
+                                return cx.throw_error(format!("Failed to rewind stream: {e}"));
                             }
                         }
                         match output_stream.read_to_end(&mut buffer) {
@@ -453,7 +453,7 @@ impl NeonBuilder {
                         match output_stream.rewind() {
                             Ok(_) => (),
                             Err(e) => {
-                                return cx.throw_error(format!("Failed to rewind stream: {e}"))
+                                return cx.throw_error(format!("Failed to rewind stream: {e}"));
                             }
                         }
                         match output_stream.read_to_end(&mut buffer) {
@@ -542,7 +542,7 @@ impl NeonBuilder {
             _ => {
                 return cx.throw_error(format!(
                     "Property '{property}' not found or not a valid type"
-                ))
+                ));
             }
         }
 
