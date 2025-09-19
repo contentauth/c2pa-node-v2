@@ -1,0 +1,25 @@
+# Jekyll configuration for C2PA Node v2 docs (Just the Docs)
+
+remote_theme: just-the-docs/just-the-docs
+plugins:
+  - jekyll-remote-theme
+  - jekyll-seo-tag
+  - jekyll-include-cache
+
+# Site metadata
+title: C2PA Node v2
+description: Node.js bindings for C2PA — API Reference and Guides
+url: ""
+baseurl: ""
+
+# GitHub link in header
+aux_links:
+  "View on GitHub": https://github.com/contentauth/c2pa-node-v2
+
+# Search
+search_enabled: true
+
+# Markdown
+markdown: kramdown
+kramdown:
+  input: GFM

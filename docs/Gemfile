@@ -1,0 +1,13 @@
+source "https://rubygems.org"
+
+gem "jekyll", "~> 4.3.3"
+# Needed for Ruby 3 in local dev
+gem "webrick", "~> 1.8"
+# Remote theme support
+gem "jekyll-remote-theme", "~> 0.4.3"
+# SEO tag used by Just the Docs
+gem "jekyll-seo-tag", "~> 2.8"
+# Include cache used by Just the Docs
+gem "jekyll-include-cache", "~> 0.2"
+# Rake used by some themes/dependencies
+gem "rake", "~> 13.2"
