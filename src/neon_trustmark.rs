@@ -196,7 +196,10 @@ pub fn fetch_model(variant: Variant, dir_path: &std::path::Path) -> Result<PathB
         .map_err(|e| Error::ModelDownload(format!("Failed to build HTTP client: {e}")))?;
 
     // Ensure directory exists
-    std::fs::create_dir_all(dir_path)?;
+    std::fs::create_dir_all(dir_path).map_err(|e| Error::FileIO {
+        path: dir_path.to_string_lossy().to_string(),
+        source: e,
+    })?;
 
     let root = "https://cc-assets.netlify.app/watermarking/trustmark-models";
 
