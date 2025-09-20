@@ -27,8 +27,12 @@ pub enum Error {
     #[error(transparent)]
     C2pa(#[from] c2pa::Error),
 
-    #[error(transparent)]
-    FileIO(#[from] std::io::Error),
+    #[error("File IO error for path '{path}': {source}")]
+    FileIO {
+        path: String,
+        #[source]
+        source: std::io::Error,
+    },
 
     #[error(transparent)]
     Image(#[from] image::ImageError),

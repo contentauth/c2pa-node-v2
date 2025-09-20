@@ -49,7 +49,10 @@ impl Asset {
         match self {
             Asset::SourceBuffer(buffer, _) => Ok(Box::new(Cursor::new(buffer))),
             Asset::File(path, _) => {
-                let file = File::open(Path::new(&path)).map_err(Error::from)?;
+                let file = File::open(Path::new(&path)).map_err(|e| Error::FileIO {
+                    path: path.clone(),
+                    source: e,
+                })?;
                 Ok(Box::new(BufReader::new(file)))
             }
             _ => Err(Error::Asset("Cannot write to source buffer".to_string())),
@@ -64,7 +67,10 @@ impl Asset {
                     .create(true)
                     .truncate(true)
                     .open(Path::new(&path))
-                    .map_err(Error::from)?;
+                    .map_err(|e| Error::FileIO {
+                        path: path.clone(),
+                        source: e,
+                    })?;
                 Ok(Box::new(file))
             }
             Asset::DestinationBuffer(buffer) => Ok(Box::new(Cursor::new(buffer.to_owned()))),
