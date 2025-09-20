@@ -31,7 +31,7 @@
     "postbuild:rust-debug": "neon dist < cargo.log",
     "postcross-build": "neon dist -m /target < cross.log",
     "release": "run-s build changeset:publish",
-    "test": "jest",
+    "test": "jest --runInBand",
     "test:watch": "jest --watch --runInBand --detectOpenHandles --forceExit"
   },
   "author": "Colin Murphy <colmurph@adobe.com>",
