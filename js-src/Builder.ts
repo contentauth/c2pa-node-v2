@@ -58,7 +58,8 @@ export class Builder implements BuilderInterface {
   }
 
   setIntent(intent: BuilderIntent): void {
-    getNeonBinary().builderSetIntent.call(this.builder, intent);
+    const intentString = JSON.stringify(intent);
+    getNeonBinary().builderSetIntent.call(this.builder, intentString);
   }
 
   setNoEmbed(noEmbed = true): void {
