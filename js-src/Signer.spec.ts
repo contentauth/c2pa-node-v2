@@ -11,6 +11,8 @@
 // specific language governing permissions and limitations under
 // each license.
 
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 import * as fs from "fs-extra";
 import * as crypto from "crypto";
 
@@ -176,7 +178,9 @@ describe("CallbackSigner", () => {
     const activeManifest = reader.getActive();
 
     // If validation_status is undefined, the signature is valid
-    expect(manifestStore.validation_status).toBeUndefined();
+    expect(manifestStore.validation_status![0].code).toBe(
+      "signingCredential.untrusted",
+    );
     expect(manifestStore.active_manifest).not.toBeUndefined();
     expect(activeManifest?.title).toBe("Test_Manifest_Buffer");
   });
