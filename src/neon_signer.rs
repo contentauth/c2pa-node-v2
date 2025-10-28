@@ -11,7 +11,7 @@
 // specific language governing permissions and limitations under
 // each license.
 
-use crate::runtime::runtime;
+use crate::runtime::{ensure_settings_applied, runtime};
 use async_trait::async_trait;
 use c2pa::{
     create_signer,
@@ -216,6 +216,7 @@ impl NeonCallbackSigner {
         let config = this.config.clone();
 
         rt.spawn(async move {
+            ensure_settings_applied();
             let signer = NeonCallbackSigner::new(channel.clone(), callback, config);
             let result = <Self as AsyncSigner>::sign(&signer, data)
                 .await

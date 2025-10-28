@@ -74,6 +74,7 @@ export class Reader implements ReaderInterface {
   }
 
   async postValidateCawg(): Promise<void> {
-    return getNeonBinary().readerPostValidateCawg.call(this.reader);
+    // No-op: CAWG validation is now handled automatically by async reader constructors
+    return Promise.resolve();
   }
 }

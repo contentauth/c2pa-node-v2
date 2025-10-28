@@ -312,6 +312,7 @@ export interface ReaderInterface {
 
   /**
    * Run CAWG validation
+   * This is a NOOP, as CAWG validation is handled automatically
    */
   postValidateCawg(): Promise<void>;
 }

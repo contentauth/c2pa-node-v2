@@ -128,7 +128,7 @@ describe("Settings", () => {
 
       // Verify settings are still intact
       const currentSettings = JSON.parse(getSettingsJson());
-      expect(currentSettings.core.merkle_tree_max_proofs).toBe(5);
+      expect(currentSettings.core.decode_identity_assertions).toBe(true);
       expect(currentSettings.verify.verify_trust).toBe(true);
       expect(currentSettings.trust.verify_trust_list).toBe(true);
     });
