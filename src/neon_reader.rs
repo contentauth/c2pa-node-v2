@@ -35,6 +35,9 @@ impl NeonReader {
     }
 
     pub fn from_stream(mut cx: FunctionContext) -> JsResult<JsPromise> {
+        // Apply settings on the main thread before spawning async task
+        ensure_settings_applied();
+
         let rt = runtime();
         let channel = cx.channel();
         let source = cx
@@ -74,6 +77,9 @@ impl NeonReader {
     }
 
     pub fn from_manifest_data_and_asset(mut cx: FunctionContext) -> JsResult<JsPromise> {
+        // Apply settings on the main thread before spawning async task
+        ensure_settings_applied();
+
         let rt = runtime();
         let channel = cx.channel();
         let manifest_data = cx.argument::<JsBuffer>(0)?;
@@ -140,6 +146,9 @@ impl NeonReader {
     }
 
     pub fn resource_to_asset(mut cx: FunctionContext) -> JsResult<JsPromise> {
+        // Apply settings on the main thread before spawning async task
+        ensure_settings_applied();
+
         let rt = runtime();
         let channel = cx.channel();
         let uri = cx.argument::<JsString>(0)?.value(&mut cx);

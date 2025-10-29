@@ -150,6 +150,9 @@ impl NeonBuilder {
     }
 
     pub fn add_ingredient(mut cx: FunctionContext) -> JsResult<JsPromise> {
+        // Apply settings on the main thread before spawning async task
+        ensure_settings_applied();
+
         let rt = runtime();
         let this = cx.this::<JsBox<Self>>()?;
         let ingredient_json = cx.argument::<JsString>(0)?.value(&mut cx);
@@ -364,6 +367,9 @@ impl NeonBuilder {
     }
 
     pub fn sign_async(mut cx: FunctionContext) -> JsResult<JsPromise> {
+        // Apply settings on the main thread before spawning async task
+        ensure_settings_applied();
+
         let rt = runtime();
         let channel = cx.channel();
 
@@ -438,6 +444,9 @@ impl NeonBuilder {
     }
 
     pub fn identity_sign_async(mut cx: FunctionContext) -> JsResult<JsPromise> {
+        // Apply settings on the main thread before spawning async task
+        ensure_settings_applied();
+
         let rt = runtime();
         let channel = cx.channel();
 

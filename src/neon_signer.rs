@@ -207,6 +207,9 @@ impl NeonCallbackSigner {
     }
 
     pub fn sign(mut cx: FunctionContext) -> JsResult<JsPromise> {
+        // Apply settings on the main thread before spawning async task
+        ensure_settings_applied();
+
         let rt = runtime();
         let this = cx.this::<JsBox<Self>>()?;
         let data = cx.argument::<JsBuffer>(0)?.as_slice(&cx).to_vec();
