@@ -7,25 +7,29 @@
 
 use crate::settings::get_global_settings_toml;
 use c2pa::settings::Settings;
-use std::sync::atomic::{AtomicBool, Ordering};
+use std::cell::Cell;
 use std::sync::{Arc, OnceLock, RwLock};
 use tokio::runtime::{Builder, Runtime};
 
 // Runtime stored in a swap-able singleton to allow reloads after settings change
 static RUNTIME: OnceLock<RwLock<Arc<Runtime>>> = OnceLock::new();
 
-// Track if settings have been applied to the current thread
-static SETTINGS_APPLIED: AtomicBool = AtomicBool::new(false);
+// Track if settings have been applied to the current thread (thread-local)
+thread_local! {
+    static SETTINGS_APPLIED: Cell<bool> = const {Cell::new(false)};
+}
 
 /// Ensure settings are applied to the current thread
 /// This is safe to call multiple times and will only apply settings once per thread
 pub fn ensure_settings_applied() {
-    if !SETTINGS_APPLIED.load(Ordering::Acquire) {
-        if let Some(toml) = get_global_settings_toml() {
-            let _ = Settings::from_toml(&toml);
+    SETTINGS_APPLIED.with(|applied| {
+        if !applied.get() {
+            if let Some(toml) = get_global_settings_toml() {
+                let _ = Settings::from_toml(&toml);
+            }
+            applied.set(true);
         }
-        SETTINGS_APPLIED.store(true, Ordering::Release);
-    }
+    });
 }
 
 fn build_runtime() -> Arc<Runtime> {
@@ -33,10 +37,7 @@ fn build_runtime() -> Arc<Runtime> {
         .enable_all()
         .on_thread_start(|| {
             // Apply the latest global TOML snapshot when each worker starts
-            if let Some(toml) = get_global_settings_toml() {
-                let _ = Settings::from_toml(&toml);
-            }
-            SETTINGS_APPLIED.store(true, Ordering::Release);
+            ensure_settings_applied();
         })
         .build()
         .expect("Failed to build runtime");
@@ -51,9 +52,6 @@ pub fn runtime() -> Arc<Runtime> {
 /// Rebuild the runtime so new worker threads use the latest global settings snapshot.
 /// Existing tasks continue on the old runtime; its workers retire when idle.
 pub fn reload_runtime() {
-    // Reset the settings flag so all threads will reapply settings
-    SETTINGS_APPLIED.store(false, Ordering::Release);
-
     let cell = RUNTIME.get_or_init(|| RwLock::new(build_runtime()));
     let new_rt = build_runtime();
     let old = {
