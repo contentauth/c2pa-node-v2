@@ -182,5 +182,8 @@ fn main(mut cx: ModuleContext) -> NeonResult<()> {
     cx.export_function("loadVerifyConfig", settings::load_verify_config)?;
     cx.export_function("getVerifyConfig", settings::get_verify_config)?;
 
+    // Reset Settings
+    cx.export_function("resetSettings", settings::reset_settings)?;
+
     Ok(())
 }

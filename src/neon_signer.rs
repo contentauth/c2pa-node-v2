@@ -11,7 +11,7 @@
 // specific language governing permissions and limitations under
 // each license.
 
-use crate::runtime::{ensure_settings_applied, runtime};
+use crate::runtime::runtime;
 use async_trait::async_trait;
 use c2pa::{
     create_signer,
@@ -207,9 +207,6 @@ impl NeonCallbackSigner {
     }
 
     pub fn sign(mut cx: FunctionContext) -> JsResult<JsPromise> {
-        // Apply settings on the main thread before spawning async task
-        ensure_settings_applied();
-
         let rt = runtime();
         let this = cx.this::<JsBox<Self>>()?;
         let data = cx.argument::<JsBuffer>(0)?.as_slice(&cx).to_vec();
@@ -219,7 +216,6 @@ impl NeonCallbackSigner {
         let config = this.config.clone();
 
         rt.spawn(async move {
-            ensure_settings_applied();
             let signer = NeonCallbackSigner::new(channel.clone(), callback, config);
             let result = <Self as AsyncSigner>::sign(&signer, data)
                 .await
@@ -359,9 +355,6 @@ impl AsyncTimeStampProvider for NeonCallbackSigner {
 #[async_trait]
 impl AsyncRawSigner for NeonCallbackSigner {
     async fn sign(&self, data: Vec<u8>) -> Result<Vec<u8>, RawSignerError> {
-        // Ensure settings are applied to the current thread
-        crate::runtime::ensure_settings_applied();
-
         let (tx, rx) = oneshot::channel();
         let sign_fn = self.callback.clone();
         let data = data.to_vec();

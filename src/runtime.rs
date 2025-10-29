@@ -13,20 +13,14 @@ use tokio::runtime::{Builder, Runtime};
 // Runtime stored in a swap-able singleton to allow reloads after settings change
 static RUNTIME: OnceLock<RwLock<Arc<Runtime>>> = OnceLock::new();
 
-/// Ensure settings are applied to the current thread
-/// This will always apply settings if they exist to ensure consistency
-pub fn ensure_settings_applied() {
-    if let Some(toml) = get_global_settings_toml() {
-        let _ = Settings::from_toml(&toml);
-    }
-}
-
 fn build_runtime() -> Arc<Runtime> {
     let rt = Builder::new_multi_thread()
         .enable_all()
         .on_thread_start(|| {
             // Apply the latest global TOML snapshot when each worker starts
-            ensure_settings_applied();
+            if let Some(toml) = get_global_settings_toml() {
+                let _ = Settings::from_toml(&toml);
+            }
         })
         .build()
         .expect("Failed to build runtime");

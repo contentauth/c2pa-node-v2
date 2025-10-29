@@ -13,7 +13,7 @@
 
 use crate::asset::parse_asset;
 use crate::error::{as_js_error, Error};
-use crate::runtime::{ensure_settings_applied, runtime};
+use crate::runtime::runtime;
 use c2pa::Reader;
 use neon::prelude::*;
 use neon::types::buffer::TypedArray;
@@ -35,9 +35,6 @@ impl NeonReader {
     }
 
     pub fn from_stream(mut cx: FunctionContext) -> JsResult<JsPromise> {
-        // Apply settings on the main thread before spawning async task
-        ensure_settings_applied();
-
         let rt = runtime();
         let channel = cx.channel();
         let source = cx
@@ -47,9 +44,6 @@ impl NeonReader {
         let (deferred, promise) = cx.promise();
         rt.spawn(async move {
             let result = async {
-                // Ensure settings are applied to the current thread
-                ensure_settings_applied();
-
                 let format = source
                     .mime_type()
                     .ok_or_else(|| {
@@ -77,9 +71,6 @@ impl NeonReader {
     }
 
     pub fn from_manifest_data_and_asset(mut cx: FunctionContext) -> JsResult<JsPromise> {
-        // Apply settings on the main thread before spawning async task
-        ensure_settings_applied();
-
         let rt = runtime();
         let channel = cx.channel();
         let manifest_data = cx.argument::<JsBuffer>(0)?;
@@ -91,9 +82,6 @@ impl NeonReader {
         let (deferred, promise) = cx.promise();
         rt.spawn(async move {
             let result = async {
-                // Ensure settings are applied to the current thread
-                ensure_settings_applied();
-
                 let format = asset
                     .mime_type()
                     .ok_or_else(|| {
@@ -146,9 +134,6 @@ impl NeonReader {
     }
 
     pub fn resource_to_asset(mut cx: FunctionContext) -> JsResult<JsPromise> {
-        // Apply settings on the main thread before spawning async task
-        ensure_settings_applied();
-
         let rt = runtime();
         let channel = cx.channel();
         let uri = cx.argument::<JsString>(0)?.value(&mut cx);
@@ -164,8 +149,6 @@ impl NeonReader {
 
         let (deferred, promise) = cx.promise();
         rt.spawn(async move {
-            // Ensure settings are applied to the current thread
-            ensure_settings_applied();
             let result = reader
                 .lock()
                 .await
