@@ -356,6 +356,9 @@ impl AsyncTimeStampProvider for NeonCallbackSigner {
 #[async_trait]
 impl AsyncRawSigner for NeonCallbackSigner {
     async fn sign(&self, data: Vec<u8>) -> Result<Vec<u8>, RawSignerError> {
+        // Ensure settings are applied to the current thread
+        crate::runtime::ensure_settings_applied();
+
         let (tx, rx) = oneshot::channel();
         let sign_fn = self.callback.clone();
         let data = data.to_vec();

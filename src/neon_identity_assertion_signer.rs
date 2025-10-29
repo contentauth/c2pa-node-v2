@@ -94,6 +94,9 @@ unsafe impl Sync for NeonIdentityAssertionSigner {}
 #[async_trait]
 impl AsyncRawSigner for NeonIdentityAssertionSigner {
     async fn sign(&self, data: Vec<u8>) -> Result<Vec<u8>, RawSignerError> {
+        // Ensure settings are applied to the current thread
+        crate::runtime::ensure_settings_applied();
+
         let signer = self.signer.read().unwrap().clone();
         AsyncRawSigner::sign(&signer, data).await
     }
@@ -111,6 +114,9 @@ impl AsyncRawSigner for NeonIdentityAssertionSigner {
     }
 
     async fn ocsp_response(&self) -> Option<Vec<u8>> {
+        // Ensure settings are applied to the current thread
+        crate::runtime::ensure_settings_applied();
+
         let signer = self.signer.read().unwrap().clone();
         AsyncRawSigner::ocsp_response(&signer).await
     }
