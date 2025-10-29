@@ -7,29 +7,18 @@
 
 use crate::settings::get_global_settings_toml;
 use c2pa::settings::Settings;
-use std::cell::Cell;
 use std::sync::{Arc, OnceLock, RwLock};
 use tokio::runtime::{Builder, Runtime};
 
 // Runtime stored in a swap-able singleton to allow reloads after settings change
 static RUNTIME: OnceLock<RwLock<Arc<Runtime>>> = OnceLock::new();
 
-// Track if settings have been applied to the current thread (thread-local)
-thread_local! {
-    static SETTINGS_APPLIED: Cell<bool> = const {Cell::new(false)};
-}
-
 /// Ensure settings are applied to the current thread
-/// This is safe to call multiple times and will only apply settings once per thread
+/// This will always apply settings if they exist to ensure consistency
 pub fn ensure_settings_applied() {
-    SETTINGS_APPLIED.with(|applied| {
-        if !applied.get() {
-            if let Some(toml) = get_global_settings_toml() {
-                let _ = Settings::from_toml(&toml);
-                applied.set(true);
-            }
-        }
-    });
+    if let Some(toml) = get_global_settings_toml() {
+        let _ = Settings::from_toml(&toml);
+    }
 }
 
 fn build_runtime() -> Arc<Runtime> {
