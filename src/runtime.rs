@@ -26,8 +26,8 @@ pub fn ensure_settings_applied() {
         if !applied.get() {
             if let Some(toml) = get_global_settings_toml() {
                 let _ = Settings::from_toml(&toml);
+                applied.set(true);
             }
-            applied.set(true);
         }
     });
 }
