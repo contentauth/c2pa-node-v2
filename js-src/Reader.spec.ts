@@ -109,7 +109,7 @@ describe("Reader", () => {
 }`);
 
   beforeAll(async () => {
-    patchVerifyConfig({ verifyTrust: false });
+    //patchVerifyConfig({ verifyTrust: false });
     await fs.ensureDir(tempDir);
   });
 
