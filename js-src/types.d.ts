@@ -309,12 +309,6 @@ export interface ReaderInterface {
    * @param filePath The path to the file
    */
   resourceToAsset(uri: string, output: DestinationAsset): Promise<number>;
-
-  /**
-   * Run CAWG validation
-   * This is a NOOP, as CAWG validation is handled automatically
-   */
-  postValidateCawg(): Promise<void>;
 }
 
 export interface IdentityAssertionSignerInterface {

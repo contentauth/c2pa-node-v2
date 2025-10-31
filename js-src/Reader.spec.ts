@@ -204,9 +204,6 @@ describe("Reader", () => {
       path: "./tests/fixtures/C_with_CAWG_data.jpg",
     });
 
-    // this is now a NO-OP
-    await reader.postValidateCawg();
-
     const activeManifest = reader.getActive();
 
     // Find the cawg.identity assertion

@@ -72,9 +72,4 @@ export class Reader implements ReaderInterface {
 
     return manifestStore.manifests[activeManifest];
   }
-
-  async postValidateCawg(): Promise<void> {
-    // No-op: CAWG validation is now handled automatically by async reader constructors
-    return Promise.resolve();
-  }
 }
