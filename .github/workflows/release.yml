@@ -55,6 +55,17 @@ jobs:
           ${{ toJson(steps.changesets.outputs) }}
           OBJECT
 
+      - name: Build documentation
+        if: steps.changesets.outputs.published == 'true'
+        run: pnpm build:docs
+
+      - name: Commit updated documentation
+        if: steps.changesets.outputs.published == 'true'
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: "docs: update generated docs"
+          add: "./docs"
+
   release-binaries:
     needs: release
     if: needs.release.outputs.published == 'true'
