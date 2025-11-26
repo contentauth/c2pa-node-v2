@@ -153,7 +153,7 @@ describe("Builder", () => {
       resources: { resources: {} },
     };
     const builder = Builder.withJson(test_definition);
-    await builder.addIngredient(parent_json, source);
+    await builder.addIngredientFromAsset(parent_json, source);
     builder.addAssertion("org.test.assertion", "assertion");
     await builder.addResource(thumbnail_ref.identifier, {
       buffer: Buffer.from("12345"),
@@ -183,7 +183,7 @@ describe("Builder", () => {
 
     beforeEach(async () => {
       // Add ingredients and resources after builder is initialized
-      await builder.addIngredient(parent_json, source);
+      await builder.addIngredientFromAsset(parent_json, source);
       await builder.addResource("thumbnail.jpg", {
         mimeType: "jpeg",
         buffer: testThumbnail,
@@ -446,7 +446,7 @@ describe("Builder", () => {
 
       const ingredientJson = '{"title": "Test Ingredient"}';
       const testThumbnail = await fs.readFile("./tests/fixtures/thumbnail.jpg");
-      await builder.addIngredient(ingredientJson, {
+      await builder.addIngredientFromAsset(ingredientJson, {
         buffer: testThumbnail,
         mimeType: "jpeg",
       });
@@ -646,6 +646,107 @@ describe("Builder", () => {
       const activeManifest = reader.getActive();
       expect(activeManifest).toBeDefined();
       expect(activeManifest?.title).toBe("Test_Manifest");
+    });
+
+    it("should add action using addAction method", async () => {
+      const simpleManifestDefinition = {
+        claim_generator_info: [
+          {
+            name: "c2pa_test",
+            version: "1.0.0",
+          },
+        ],
+        title: "Test_AddAction",
+        format: "image/jpeg",
+        assertions: [],
+        resources: { resources: {} },
+      };
+
+      const builder = Builder.withJson(simpleManifestDefinition);
+
+      // Add an action using addAction method
+      // The action needs to be a structured object matching the c2pa Action type
+      const actionJson = JSON.stringify({
+        action: "c2pa.edited",
+      });
+      builder.addAction(actionJson);
+
+      // Sign the manifest
+      const dest = { path: path.join(tempDir, "add_action_test.jpg") };
+      const signer = LocalSigner.newSigner(publicKey, privateKey, "es256");
+      builder.sign(signer, source, dest);
+
+      // Verify the action was added
+      const reader = await Reader.fromAsset(dest);
+      const activeManifest = reader.getActive();
+      const actionsAssertion = activeManifest?.assertions?.find(
+        (a: any) => a.label === "c2pa.actions.v2",
+      );
+      expect(actionsAssertion).toBeDefined();
+      if (isActionsAssertion(actionsAssertion)) {
+        const actions = actionsAssertion.data.actions;
+        const editedAction = actions.find((a: any) => a.action === "c2pa.edited");
+        expect(editedAction).toBeDefined();
+        expect(editedAction?.action).toBe("c2pa.edited");
+      } else {
+        throw new Error("Actions assertion does not have the expected structure");
+      }
+    });
+
+    it("should add ingredient using addIngredient method", async () => {
+      const simpleManifestDefinition = {
+        claim_generator_info: [
+          {
+            name: "c2pa_test",
+            version: "1.0.0",
+          },
+        ],
+        title: "Test_AddIngredient",
+        format: "image/jpeg",
+        ingredients: [],
+        assertions: [
+          {
+            label: "c2pa.actions",
+            data: {
+              actions: [
+                {
+                  action: "c2pa.created",
+                  digitalSourceType: "http://c2pa.org/digitalsourcetype/empty",
+                },
+              ],
+            },
+          },
+        ],
+        resources: { resources: {} },
+      };
+
+      const builder = Builder.withJson(simpleManifestDefinition);
+
+      // Add an ingredient using addIngredient method
+      const ingredientJson = JSON.stringify({
+        title: "Test Ingredient via addIngredient",
+        format: "image/jpeg",
+        instance_id: "ingredient-12345",
+        relationship: "componentOf",
+      });
+      builder.addIngredient(ingredientJson);
+
+      // Sign the manifest
+      const dest = { path: path.join(tempDir, "add_ingredient_test.jpg") };
+      const signer = LocalSigner.newSigner(publicKey, privateKey, "es256");
+      builder.sign(signer, source, dest);
+
+      // Verify the ingredient was added
+      const reader = await Reader.fromAsset(dest);
+      const activeManifest = reader.getActive();
+      expect(activeManifest?.ingredients).toBeDefined();
+      expect(activeManifest?.ingredients?.length).toBeGreaterThan(0);
+      const addedIngredient = activeManifest?.ingredients?.find(
+        (ing: any) => ing.title === "Test Ingredient via addIngredient",
+      );
+      expect(addedIngredient).toBeDefined();
+      expect(addedIngredient?.instance_id).toBe("ingredient-12345");
+      expect(addedIngredient?.relationship).toBe("componentOf");
     });
   });
 });
