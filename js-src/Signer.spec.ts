@@ -172,8 +172,9 @@ describe("CallbackSigner", () => {
       buffer: dest.buffer! as Buffer,
       mimeType: "image/jpeg",
     });
-    const manifestStore = reader.json();
-    const activeManifest = reader.getActive();
+      expect(reader).not.toBeNull();
+    const manifestStore = reader!.json();
+    const activeManifest = reader!.getActive();
 
     // If validation_status is undefined, the signature is valid
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
