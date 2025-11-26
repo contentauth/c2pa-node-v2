@@ -226,17 +226,14 @@ export interface BuilderInterface {
   addResource(uri: string, resource: SourceAsset): Promise<void>;
 
   /**
-   * Add an ingredient from json only.
+   * Add an ingredient to the manifest
    * @param ingredientJson The JSON representation of the ingredient
+   * @param ingredient Optional source asset (buffer or file) for the ingredient
    */
-  addIngredient(ingredientJson: string): void;
-
-  /**
-   * Add an ingredient from a buffer or file
-   * @param ingredientJson The JSON representation of the ingredient
-   * @param ingredient The source and format of the ingredient
-   */
-  addIngredientFromAsset(ingredientJson: string, ingredient: SourceAsset): void;
+  addIngredient(
+    ingredientJson: string,
+    ingredient?: SourceAsset,
+  ): Promise<void>;
 
   /**
    * Convert the Builder into a archive formatted buffer or file

@@ -153,7 +153,7 @@ describe("Builder", () => {
       resources: { resources: {} },
     };
     const builder = Builder.withJson(test_definition);
-    await builder.addIngredientFromAsset(parent_json, source);
+    await builder.addIngredient(parent_json, source);
     builder.addAssertion("org.test.assertion", "assertion");
     await builder.addResource(thumbnail_ref.identifier, {
       buffer: Buffer.from("12345"),
@@ -183,7 +183,7 @@ describe("Builder", () => {
 
     beforeEach(async () => {
       // Add ingredients and resources after builder is initialized
-      await builder.addIngredientFromAsset(parent_json, source);
+      await builder.addIngredient(parent_json, source);
       await builder.addResource("thumbnail.jpg", {
         mimeType: "jpeg",
         buffer: testThumbnail,
@@ -453,7 +453,7 @@ describe("Builder", () => {
 
       const ingredientJson = '{"title": "Test Ingredient"}';
       const testThumbnail = await fs.readFile("./tests/fixtures/thumbnail.jpg");
-      await builder.addIngredientFromAsset(ingredientJson, {
+      await builder.addIngredient(ingredientJson, {
         buffer: testThumbnail,
         mimeType: "jpeg",
       });
