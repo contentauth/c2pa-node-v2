@@ -35,7 +35,7 @@ import type {
 import { IdentityAssertionSigner } from "./IdentityAssertion.js";
 
 export class Builder implements BuilderInterface {
-  private constructor(private builder: NeonBuilderHandle) {}
+  constructor(private builder: NeonBuilderHandle) {}
 
   static new(): Builder {
     const builder: NeonBuilderHandle = getNeonBinary().builderNew();
