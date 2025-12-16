@@ -52,7 +52,7 @@ impl NeonReader {
                 let format = source
                     .mime_type()
                     .ok_or_else(|| {
-                        Error::Signing("Ingredient asset must have a mime type".to_string())
+                        Error::Reading("Source asset must have a mime type".to_string())
                     })?
                     .to_owned();
 
@@ -100,7 +100,7 @@ impl NeonReader {
                 let format = asset
                     .mime_type()
                     .ok_or_else(|| {
-                        Error::Signing("Ingredient asset must have a mime type".to_string())
+                        Error::Reading("Source asset must have a mime type".to_string())
                     })?
                     .to_owned();
                 let stream = asset.into_read_stream()?;

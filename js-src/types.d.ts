@@ -315,6 +315,11 @@ export interface BuilderInterface {
    * @returns The manifest definition
    */
   updateManifestProperty(property: string, value: string | ClaimVersion): void;
+
+  /**
+   * Get the internal handle for use with Neon bindings
+   */
+  getHandle(): NeonBuilderHandle;
 }
 
 export interface ReaderInterface {

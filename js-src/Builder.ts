@@ -235,4 +235,8 @@ export class Builder implements BuilderInterface {
       value,
     );
   }
+
+  getHandle(): NeonBuilderHandle {
+    return this.builder;
+  }
 }
