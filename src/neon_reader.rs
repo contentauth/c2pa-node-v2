@@ -182,16 +182,17 @@ impl NeonReader {
                         None
                     };
 
+                    let result = cx.empty_object();
+                    let js_bytes_written = cx.number(bytes_written as f64);
                     if let Some(buffer) = buffer {
                         let js_buffer = JsBuffer::from_slice(&mut cx, &buffer)?;
-                        let js_bytes_written = cx.number(bytes_written as f64);
-                        let result = cx.empty_object();
                         result.set(&mut cx, "buffer", js_buffer)?;
-                        result.set(&mut cx, "bytes_written", js_bytes_written)?;
-                        Ok(result.upcast::<JsValue>())
                     } else {
-                        Ok(cx.number(bytes_written as f64).upcast::<JsValue>())
+                        let empty_buffer = JsBuffer::from_slice(&mut cx, &[])?;
+                        result.set(&mut cx, "buffer", empty_buffer)?;
                     }
+                    result.set(&mut cx, "bytes_written", js_bytes_written)?;
+                    Ok(result.upcast::<JsValue>())
                 }
                 Err(err) => as_js_error(&mut cx, err).and_then(|err| cx.throw(err)),
             });
