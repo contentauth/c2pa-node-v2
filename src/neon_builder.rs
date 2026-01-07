@@ -18,30 +18,14 @@ use crate::neon_reader::NeonReader;
 use crate::neon_signer::{CallbackSignerConfig, NeonCallbackSigner, NeonLocalSigner};
 use crate::runtime::runtime;
 use crate::utils::parse_settings;
-use c2pa::{Builder, BuilderIntent, Context, Ingredient};
+use c2pa::{Builder, BuilderIntent, Ingredient};
 use neon::context::Context as NeonContext;
 use neon::prelude::*;
 use neon_serde4;
-use serde::{Deserialize, Serialize};
 use serde_json;
 use std::ops::Deref;
 use std::sync::Arc;
 use tokio::sync::Mutex;
-
-#[derive(Default, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-struct IngredientThumbnail {
-    pub format: String,
-    #[serde(with = "serde_bytes")]
-    pub data: Vec<u8>,
-}
-
-#[derive(Default, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-struct IngredientOptions {
-    pub is_parent: bool,
-    pub thumbnail: Option<IngredientThumbnail>,
-}
 
 pub struct NeonBuilder {
     builder: Arc<Mutex<Builder>>,

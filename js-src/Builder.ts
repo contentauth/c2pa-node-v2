@@ -39,7 +39,11 @@ export class Builder implements BuilderInterface {
   constructor(private builder: NeonBuilderHandle) {}
 
   static new(settings?: C2paSettings): Builder {
-    const settingsStr = settings ? (typeof settings === 'string' ? settings : JSON.stringify(settings)) : undefined;
+    const settingsStr = settings
+      ? typeof settings === "string"
+        ? settings
+        : JSON.stringify(settings)
+      : undefined;
     const builder: NeonBuilderHandle = getNeonBinary().builderNew(settingsStr);
     return new Builder(builder);
   }
@@ -59,9 +63,15 @@ export class Builder implements BuilderInterface {
         "Failed to stringify JSON Manifest Definition: Unknown error",
       );
     }
-    const settingsStr = settings ? (typeof settings === 'string' ? settings : JSON.stringify(settings)) : undefined;
-    const builder: NeonBuilderHandle =
-      getNeonBinary().builderWithJson(jsonString, settingsStr);
+    const settingsStr = settings
+      ? typeof settings === "string"
+        ? settings
+        : JSON.stringify(settings)
+      : undefined;
+    const builder: NeonBuilderHandle = getNeonBinary().builderWithJson(
+      jsonString,
+      settingsStr,
+    );
     return new Builder(builder);
   }
 
@@ -130,9 +140,18 @@ export class Builder implements BuilderInterface {
     return getNeonBinary().builderToArchive.call(this.builder, asset);
   }
 
-  static async fromArchive(asset: SourceAsset, settings?: C2paSettings): Promise<Builder> {
-    const settingsStr = settings ? (typeof settings === 'string' ? settings : JSON.stringify(settings)) : undefined;
-    return new Builder(await getNeonBinary().builderFromArchive(asset, settingsStr));
+  static async fromArchive(
+    asset: SourceAsset,
+    settings?: C2paSettings,
+  ): Promise<Builder> {
+    const settingsStr = settings
+      ? typeof settings === "string"
+        ? settings
+        : JSON.stringify(settings)
+      : undefined;
+    return new Builder(
+      await getNeonBinary().builderFromArchive(asset, settingsStr),
+    );
   }
 
   sign(

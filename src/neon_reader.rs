@@ -15,7 +15,7 @@ use crate::asset::parse_asset;
 use crate::error::{as_js_error, Error, Result};
 use crate::runtime::runtime;
 use crate::utils::parse_settings;
-use c2pa::{Context, Reader};
+use c2pa::Reader;
 use neon::context::Context as NeonContext;
 use neon::prelude::*;
 use neon::types::buffer::TypedArray;

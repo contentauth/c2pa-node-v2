@@ -46,8 +46,7 @@ pub fn parse_settings(
         Some(js_value) => {
             if js_value.is_a::<JsString, _>(cx) {
                 let settings_string = js_value
-                    .downcast::<JsString, _>(cx)
-                    .or_else(|_| Err(Error::Signing(format!("{}: Expected settings string", error_prefix))))?
+                    .downcast::<JsString, _>(cx).map_err(|_| Error::Signing(format!("{}: Expected settings string", error_prefix)))?
                     .value(cx);
 
                 // Create context with settings
