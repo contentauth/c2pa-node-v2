@@ -125,8 +125,8 @@ impl NeonReader {
                     .to_owned();
                 let stream = asset.into_read_stream()?;
 
-                // Note: from_manifest_data_and_stream_async internally creates a new context
-                // We cannot pass custom settings to this method currently
+                // TODO: c2pa-rs currently does not support passing Context to
+                // from_manifest_data_and_stream_async
                 let reader =
                     Reader::from_manifest_data_and_stream_async(&c2pa_data, &format, stream)
                         .await?;

@@ -309,8 +309,7 @@ impl NeonBuilder {
             .argument::<JsObject>(0)
             .and_then(|obj| parse_asset(&mut cx, obj))?;
 
-        // Parse optional settings parameter (argument 1) - note: settings are not used for from_archive
-        // as the archive loading doesn't involve verification or trust operations
+        // TODO: This won't work until from_archive_with_context() is ready
         let _context_opt =
             parse_settings(&mut cx, 1, "Builder").or_else(|err| cx.throw_error(err.to_string()))?;
 
