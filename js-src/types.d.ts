@@ -472,7 +472,7 @@ export interface VerifyConfig {
  * Only trust, verify, and builder settings are configurable from the Node SDK.
  * Uses snake_case internally to match the c2pa-rs settings format.
  */
-export interface C2paSettingsConfig {
+export interface SettingsContext {
   /** C2PA trust configuration */
   trust?: {
     verify_trust_list?: boolean;

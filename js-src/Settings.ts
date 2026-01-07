@@ -14,20 +14,14 @@
 import * as fs from "fs-extra";
 import fetch from "node-fetch";
 
-import type {
-  TrustConfig,
-  VerifyConfig,
-  C2paSettingsConfig,
-} from "./types.d.ts";
+import type { TrustConfig, VerifyConfig, SettingsContext } from "./types.d.ts";
 
 /**
  * Create a settings object with trust configuration.
  * @param trustConfig The trust configuration
  * @returns Settings object that can be passed to Reader/Builder
  */
-export function createTrustSettings(
-  trustConfig: TrustConfig,
-): C2paSettingsConfig {
+export function createTrustSettings(trustConfig: TrustConfig): SettingsContext {
   return {
     trust: {
       verify_trust_list: trustConfig.verifyTrustList,
@@ -46,7 +40,7 @@ export function createTrustSettings(
  */
 export function createCawgTrustSettings(
   trustConfig: TrustConfig,
-): C2paSettingsConfig {
+): SettingsContext {
   return {
     cawg_trust: {
       verify_trust_list: trustConfig.verifyTrustList,
@@ -65,7 +59,7 @@ export function createCawgTrustSettings(
  */
 export function createVerifySettings(
   verifyConfig: VerifyConfig,
-): C2paSettingsConfig {
+): SettingsContext {
   return {
     verify: {
       verify_after_reading: verifyConfig.verifyAfterReading,
@@ -87,10 +81,8 @@ export function createVerifySettings(
  * @param settings Settings objects to merge
  * @returns Merged settings object
  */
-export function mergeSettings(
-  ...settings: C2paSettingsConfig[]
-): C2paSettingsConfig {
-  const merged: C2paSettingsConfig = {};
+export function mergeSettings(...settings: SettingsContext[]): SettingsContext {
+  const merged: SettingsContext = {};
 
   for (const setting of settings) {
     if (setting.trust) {
@@ -115,7 +107,7 @@ export function mergeSettings(
  * @param settings The settings object
  * @returns JSON string representation
  */
-export function settingsToJson(settings: C2paSettingsConfig): string {
+export function settingsToJson(settings: SettingsContext): string {
   return JSON.stringify(settings);
 }
 

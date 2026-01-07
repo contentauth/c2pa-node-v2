@@ -13,7 +13,7 @@ import {
   loadSettingsFromFile,
   loadSettingsFromUrl,
 } from "./Settings.js";
-import type { TrustConfig, VerifyConfig, C2paSettingsConfig } from "./types.d.ts";
+import type { TrustConfig, VerifyConfig, SettingsContext } from "./types.d.ts";
 import * as fs from "fs-extra";
 import * as path from "path";
 import * as os from "os";
@@ -180,14 +180,14 @@ describe("Settings", () => {
   });
 
   it("does not include undefined values when merging settings", () => {
-    const settings1: C2paSettingsConfig = {
+    const settings1: SettingsContext = {
       trust: {
         verify_trust_list: true,
         user_anchors: "test",
       },
     };
 
-    const settings2: C2paSettingsConfig = {
+    const settings2: SettingsContext = {
       trust: {
         allowed_list: undefined, // Explicitly undefined
       },
@@ -219,7 +219,7 @@ describe("Settings", () => {
       strictV1Validation: false,
     });
 
-    const settings2: C2paSettingsConfig = {
+    const settings2: SettingsContext = {
       verify: {
         verify_trust: true, // Override this value
         ocsp_fetch: true, // Override this value
@@ -255,7 +255,7 @@ describe("Settings", () => {
 
       const loaded = await loadSettingsFromFile(filePath);
       expect(loaded).toBe(settingsContent);
-      
+
       // Verify it can be parsed
       const parsed = JSON.parse(loaded);
       expect(parsed.verify.verify_after_reading).toBe(false);
@@ -297,7 +297,9 @@ verify_after_sign = false`;
         text: async () => mockSettings,
       } as any);
 
-      const loaded = await loadSettingsFromUrl("https://example.com/settings.json");
+      const loaded = await loadSettingsFromUrl(
+        "https://example.com/settings.json",
+      );
       expect(loaded).toBe(mockSettings);
       expect(fetch).toHaveBeenCalledWith("https://example.com/settings.json");
     });
@@ -311,7 +313,7 @@ verify_after_sign = false`;
       } as any);
 
       await expect(
-        loadSettingsFromUrl("https://example.com/missing.json")
+        loadSettingsFromUrl("https://example.com/missing.json"),
       ).rejects.toThrow("Failed to fetch settings from URL: 404 Not Found");
     });
 
@@ -320,7 +322,7 @@ verify_after_sign = false`;
       vi.mocked(fetch).mockRejectedValue(new Error("Network error"));
 
       await expect(
-        loadSettingsFromUrl("https://example.com/settings.json")
+        loadSettingsFromUrl("https://example.com/settings.json"),
       ).rejects.toThrow("Network error");
     });
   });
