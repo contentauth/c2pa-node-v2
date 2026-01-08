@@ -125,7 +125,7 @@ impl NeonReader {
                     .to_owned();
                 let stream = asset.into_read_stream()?;
 
-                // TODO: c2pa-rs currently does not support passing Context to
+                // TODO: CAI-10614 c2pa-rs currently does not support passing Context to
                 // from_manifest_data_and_stream_async
                 let reader =
                     Reader::from_manifest_data_and_stream_async(&c2pa_data, &format, stream)
