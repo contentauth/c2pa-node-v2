@@ -49,7 +49,7 @@ This command will download precompiled binaries for the following systems:
 
 ### Reader
 
-The `Reader` class is used to read and validate C2PA manifests from media files. It can parse embedded manifests or fetch remote manifests.
+The `Reader` class is used to read and validate C2PA manifests from media files. It can parse embedded manifests or fetch remote manifests. Refer to the [Rust SDK](https://github.com/contentauth/c2pa-rs) for the list of settings and their effects.
 
 ```javascript
 import { Reader } from '@contentauth/c2pa-node';
@@ -84,7 +84,7 @@ const remoteUrl = reader.remoteUrl();
 
 ### Builder
 
-The `Builder` class is the main component for creating and signing C2PA manifests. It provides methods to add assertions, resources, and ingredients to manifests, and handles the signing process. Use the `Signer` class to sign the manifests.
+The `Builder` class is the main component for creating and signing C2PA manifests. It provides methods to add assertions, resources, and ingredients to manifests, and handles the signing process. Use the `Signer` class to sign the manifests. Refer to the [Rust SDK](https://github.com/contentauth/c2pa-rs) for the list of settings and their effects.
 
 ```javascript
 import { Builder } from '@contentauth/c2pa-node';
@@ -94,9 +94,6 @@ const builder = Builder.new();
 
 // Create with custom settings
 const settings = {
-  verify: {
-    verify_after_sign: false
-  },
   builder: {
     generate_c2pa_archive: true
   }
@@ -237,7 +234,7 @@ const decodedData = await trustmark.decode(imageBuffer);
 
 ### Settings and Configuration
 
-The library provides comprehensive settings management that can be configured per Reader/Builder instance or using helper functions.
+The library provides comprehensive settings management that can be configured per Reader/Builder instance or using helper functions. Refer to the [Rust SDK](https://github.com/contentauth/c2pa-rs) for the list of settings and their effects.
 
 #### Per-Instance Settings
 

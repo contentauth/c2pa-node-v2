@@ -17,7 +17,7 @@ import fetch from "node-fetch";
 import type { TrustConfig, VerifyConfig, SettingsContext } from "./types.d.ts";
 
 /**
- * Create a settings object with trust configuration.
+ * Create a Settings object with trust configuration.
  * @param trustConfig The trust configuration
  * @returns Settings object that can be passed to Reader/Builder
  */
