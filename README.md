@@ -153,10 +153,10 @@ For more details on builder intents, see the [c2pa-rs Builder documentation](htt
 When you have access to the ingredient asset, use `addIngredient` with an asset to include both the metadata and the asset data:
 
 ```javascript
-import * as fs from 'fs';
+import * as fs from "node:fs/promises";
 
 // Load the ingredient asset
-const ingredientBuffer = await fs.promises.readFile('path/to/source-image.jpg');
+const ingredientBuffer = await fs.readFile('path/to/source-image.jpg');
 
 // Create a builder
 const builder = Builder.new();
