@@ -453,21 +453,21 @@ export interface TrustConfig {
  */
 export interface VerifyConfig {
   /** Whether to verify after reading a manifest */
-  verifyAfterReading: boolean;
+  verifyAfterReading?: boolean;
   /** Whether to verify after signing a manifest */
-  verifyAfterSign: boolean;
+  verifyAfterSign?: boolean;
   /** Whether to verify trust during validation */
-  verifyTrust: boolean;
+  verifyTrust?: boolean;
   /** Whether to verify timestamp trust */
-  verifyTimestampTrust: boolean;
+  verifyTimestampTrust?: boolean;
   /** Whether to fetch OCSP responses */
-  ocspFetch: boolean;
+  ocspFetch?: boolean;
   /** Whether to fetch remote manifests */
-  remoteManifestFetch: boolean;
+  remoteManifestFetch?: boolean;
   /** Whether to skip ingredient conflict resolution */
-  skipIngredientConflictResolution: boolean;
+  skipIngredientConflictResolution?: boolean;
   /** Whether to use strict v1 validation */
-  strictV1Validation: boolean;
+  strictV1Validation?: boolean;
 }
 
 /**

@@ -60,19 +60,25 @@ export function createCawgTrustSettings(
 export function createVerifySettings(
   verifyConfig: VerifyConfig,
 ): SettingsContext {
-  return {
-    verify: {
-      verify_after_reading: verifyConfig.verifyAfterReading,
-      verify_after_sign: verifyConfig.verifyAfterSign,
-      verify_trust: verifyConfig.verifyTrust,
-      verify_timestamp_trust: verifyConfig.verifyTimestampTrust,
-      ocsp_fetch: verifyConfig.ocspFetch,
-      remote_manifest_fetch: verifyConfig.remoteManifestFetch,
-      skip_ingredient_conflict_resolution:
-        verifyConfig.skipIngredientConflictResolution,
-      strict_v1_validation: verifyConfig.strictV1Validation,
-    },
-  };
+  const verify: NonNullable<SettingsContext["verify"]> = {};
+  if (verifyConfig.verifyAfterReading !== undefined)
+    verify.verify_after_reading = verifyConfig.verifyAfterReading;
+  if (verifyConfig.verifyAfterSign !== undefined)
+    verify.verify_after_sign = verifyConfig.verifyAfterSign;
+  if (verifyConfig.verifyTrust !== undefined)
+    verify.verify_trust = verifyConfig.verifyTrust;
+  if (verifyConfig.verifyTimestampTrust !== undefined)
+    verify.verify_timestamp_trust = verifyConfig.verifyTimestampTrust;
+  if (verifyConfig.ocspFetch !== undefined)
+    verify.ocsp_fetch = verifyConfig.ocspFetch;
+  if (verifyConfig.remoteManifestFetch !== undefined)
+    verify.remote_manifest_fetch = verifyConfig.remoteManifestFetch;
+  if (verifyConfig.skipIngredientConflictResolution !== undefined)
+    verify.skip_ingredient_conflict_resolution =
+      verifyConfig.skipIngredientConflictResolution;
+  if (verifyConfig.strictV1Validation !== undefined)
+    verify.strict_v1_validation = verifyConfig.strictV1Validation;
+  return { verify };
 }
 
 /**

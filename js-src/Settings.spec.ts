@@ -71,6 +71,17 @@ describe("Settings", () => {
     expect(settings.verify?.ocsp_fetch).toBe(true);
   });
 
+  it("creates verify settings with partial config", () => {
+    const settings = createVerifySettings({
+      verifyAfterReading: false,
+    });
+
+    expect(settings.verify).toBeDefined();
+    expect(settings.verify?.verify_after_reading).toBe(false);
+    expect(settings.verify?.verify_after_sign).toBeUndefined();
+    expect(settings.verify?.verify_trust).toBeUndefined();
+  });
+
   it("merges multiple settings", () => {
     const trustSettings = createTrustSettings({
       verifyTrustList: true,
