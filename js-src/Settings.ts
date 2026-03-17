@@ -16,21 +16,32 @@ import fetch from "node-fetch";
 
 import type { TrustConfig, VerifyConfig, SettingsContext } from "./types.d.ts";
 
+type SettingsObjectType = {
+  [k: string]: string | boolean | undefined | SettingsObjectType;
+};
+
+function snakeCaseify(object: SettingsObjectType): SettingsObjectType {
+  return Object.entries(object).reduce(
+    (result, [key, val]) => {
+      result[snakeCase(key)] =
+        typeof val === "object" && val !== null ? snakeCaseify(val) : val;
+      return result;
+    },
+    {} as SettingsObjectType,
+  );
+}
+
+function snakeCase(str: string): string {
+  return str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
+}
+
 /**
  * Create a Settings object with trust configuration.
  * @param trustConfig The trust configuration
  * @returns Settings object that can be passed to Reader/Builder
  */
 export function createTrustSettings(trustConfig: TrustConfig): SettingsContext {
-  return {
-    trust: {
-      verify_trust_list: trustConfig.verifyTrustList,
-      user_anchors: trustConfig.userAnchors,
-      trust_anchors: trustConfig.trustAnchors,
-      trust_config: trustConfig.trustConfig,
-      allowed_list: trustConfig.allowedList,
-    },
-  };
+  return { trust: { ...trustConfig } };
 }
 
 /**
@@ -41,15 +52,7 @@ export function createTrustSettings(trustConfig: TrustConfig): SettingsContext {
 export function createCawgTrustSettings(
   trustConfig: TrustConfig,
 ): SettingsContext {
-  return {
-    cawg_trust: {
-      verify_trust_list: trustConfig.verifyTrustList,
-      user_anchors: trustConfig.userAnchors,
-      trust_anchors: trustConfig.trustAnchors,
-      trust_config: trustConfig.trustConfig,
-      allowed_list: trustConfig.allowedList,
-    },
-  };
+  return { cawgTrust: { ...trustConfig } };
 }
 
 /**
@@ -60,25 +63,7 @@ export function createCawgTrustSettings(
 export function createVerifySettings(
   verifyConfig: VerifyConfig,
 ): SettingsContext {
-  const verify: NonNullable<SettingsContext["verify"]> = {};
-  if (verifyConfig.verifyAfterReading !== undefined)
-    verify.verify_after_reading = verifyConfig.verifyAfterReading;
-  if (verifyConfig.verifyAfterSign !== undefined)
-    verify.verify_after_sign = verifyConfig.verifyAfterSign;
-  if (verifyConfig.verifyTrust !== undefined)
-    verify.verify_trust = verifyConfig.verifyTrust;
-  if (verifyConfig.verifyTimestampTrust !== undefined)
-    verify.verify_timestamp_trust = verifyConfig.verifyTimestampTrust;
-  if (verifyConfig.ocspFetch !== undefined)
-    verify.ocsp_fetch = verifyConfig.ocspFetch;
-  if (verifyConfig.remoteManifestFetch !== undefined)
-    verify.remote_manifest_fetch = verifyConfig.remoteManifestFetch;
-  if (verifyConfig.skipIngredientConflictResolution !== undefined)
-    verify.skip_ingredient_conflict_resolution =
-      verifyConfig.skipIngredientConflictResolution;
-  if (verifyConfig.strictV1Validation !== undefined)
-    verify.strict_v1_validation = verifyConfig.strictV1Validation;
-  return { verify };
+  return { verify: { ...verifyConfig } };
 }
 
 /**
@@ -94,8 +79,8 @@ export function mergeSettings(...settings: SettingsContext[]): SettingsContext {
     if (setting.trust) {
       merged.trust = { ...merged.trust, ...setting.trust };
     }
-    if (setting.cawg_trust) {
-      merged.cawg_trust = { ...merged.cawg_trust, ...setting.cawg_trust };
+    if (setting.cawgTrust) {
+      merged.cawgTrust = { ...merged.cawgTrust, ...setting.cawgTrust };
     }
     if (setting.verify) {
       merged.verify = { ...merged.verify, ...setting.verify };
@@ -110,11 +95,12 @@ export function mergeSettings(...settings: SettingsContext[]): SettingsContext {
 
 /**
  * Convert a settings object to a JSON string.
+ * Converts camelCase keys to snake_case to match the c2pa-rs settings format.
  * @param settings The settings object
- * @returns JSON string representation
+ * @returns JSON string representation with snake_case keys
  */
 export function settingsToJson(settings: SettingsContext): string {
-  return JSON.stringify(settings);
+  return JSON.stringify(snakeCaseify(settings as SettingsObjectType));
 }
 
 /**

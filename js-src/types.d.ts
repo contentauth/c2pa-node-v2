@@ -477,32 +477,11 @@ export interface VerifyConfig {
  */
 export interface SettingsContext {
   /** C2PA trust configuration */
-  trust?: {
-    verify_trust_list?: boolean;
-    user_anchors?: string;
-    trust_anchors?: string;
-    trust_config?: string;
-    allowed_list?: string;
-  };
+  trust?: TrustConfig;
   /** CAWG trust configuration */
-  cawg_trust?: {
-    verify_trust_list?: boolean;
-    user_anchors?: string;
-    trust_anchors?: string;
-    trust_config?: string;
-    allowed_list?: string;
-  };
+  cawgTrust?: TrustConfig;
   /** Verification configuration */
-  verify?: {
-    verify_after_reading?: boolean;
-    verify_after_sign?: boolean;
-    verify_trust?: boolean;
-    verify_timestamp_trust?: boolean;
-    ocsp_fetch?: boolean;
-    remote_manifest_fetch?: boolean;
-    skip_ingredient_conflict_resolution?: boolean;
-    strict_v1_validation?: boolean;
-  };
+  verify?: VerifyConfig;
   /** Builder configuration */
   builder?: {
     thumbnail?: {
