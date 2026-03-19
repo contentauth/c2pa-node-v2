@@ -263,10 +263,8 @@ const reader = await Reader.fromAsset(
   { verify: { verify_after_reading: false } }
 );
 
-// Get the manifest store JSON
-const manifestStore = reader.json();
-const activeLabel = manifestStore.active_manifest;
-const activeManifest = manifestStore.manifests[activeLabel];
+// Get the ingredients from the active manifest
+const activeManifest = reader.getActive();
 const ingredients = activeManifest.ingredients;
 
 // Create a new builder with the ingredients from the archive
@@ -278,18 +276,16 @@ const builder = Builder.withJson({
 // Transfer binary resources (thumbnails, manifest_data) for each ingredient
 for (const ingredient of ingredients) {
   if (ingredient.thumbnail) {
-    const dest = { buffer: null };
-    await reader.resourceToAsset(ingredient.thumbnail.identifier, dest);
+    const resource = await reader.resourceToAsset(ingredient.thumbnail.identifier, { buffer: null });
     await builder.addResource(ingredient.thumbnail.identifier, {
-      buffer: dest.buffer,
+      buffer: resource.buffer,
       mimeType: ingredient.thumbnail.format,
     });
   }
   if (ingredient.manifest_data) {
-    const dest = { buffer: null };
-    await reader.resourceToAsset(ingredient.manifest_data.identifier, dest);
+    const resource = await reader.resourceToAsset(ingredient.manifest_data.identifier, { buffer: null });
     await builder.addResource(ingredient.manifest_data.identifier, {
-      buffer: dest.buffer,
+      buffer: resource.buffer,
       mimeType: 'application/c2pa',
     });
   }
@@ -310,9 +306,8 @@ const reader = await Reader.fromAsset(
   { verify: { verify_after_reading: false } }
 );
 
-const manifestStore = reader.json();
-const activeLabel = manifestStore.active_manifest;
-const allIngredients = manifestStore.manifests[activeLabel].ingredients;
+const activeManifest = reader.getActive();
+const allIngredients = activeManifest.ingredients;
 
 // Select only the ingredients you want (e.g., by title or instance_id)
 const selected = allIngredients.filter(
@@ -328,18 +323,16 @@ const builder = Builder.withJson({
 // Transfer resources only for selected ingredients
 for (const ingredient of selected) {
   if (ingredient.thumbnail) {
-    const dest = { buffer: null };
-    await reader.resourceToAsset(ingredient.thumbnail.identifier, dest);
+    const resource = await reader.resourceToAsset(ingredient.thumbnail.identifier, { buffer: null });
     await builder.addResource(ingredient.thumbnail.identifier, {
-      buffer: dest.buffer,
+      buffer: resource.buffer,
       mimeType: ingredient.thumbnail.format,
     });
   }
   if (ingredient.manifest_data) {
-    const dest = { buffer: null };
-    await reader.resourceToAsset(ingredient.manifest_data.identifier, dest);
+    const resource = await reader.resourceToAsset(ingredient.manifest_data.identifier, { buffer: null });
     await builder.addResource(ingredient.manifest_data.identifier, {
-      buffer: dest.buffer,
+      buffer: resource.buffer,
       mimeType: 'application/c2pa',
     });
   }
