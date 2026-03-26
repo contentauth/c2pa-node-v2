@@ -198,7 +198,7 @@ pub fn fetch_model(variant: Variant, dir_path: &std::path::Path) -> Result<PathB
     // Ensure directory exists
     std::fs::create_dir_all(dir_path)?;
 
-    let root = "https://cc-assets.netlify.app/watermarking/trustmark-models";
+    let root = "https://cai-watermark.adobe.net/watermarking/trustmark-models";
 
     // Construct filenames manually since encoder_filename/decoder_filename are private
     let encoder_filename = format!("encoder_{variant}.onnx");
