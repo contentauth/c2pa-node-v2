@@ -1,4 +1,4 @@
-# @contentauth/c2pa-node
+# @stabilityprotocol/c2pa-node
 
 ## 0.5.5
 

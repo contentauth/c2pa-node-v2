@@ -1,8 +1,8 @@
 {
-  "name": "@contentauth/c2pa-node",
+  "name": "@stabilityprotocol/c2pa-node",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/contentauth/c2pa-node-v2.git"
+    "url": "git+https://github.com/stabilityprotocol/c2pa-node-v2.git"
   },
   "version": "0.5.5",
   "description": "Node.js bindings for C2PA",
@@ -74,9 +74,9 @@
     "c2pa"
   ],
   "bugs": {
-    "url": "https://github.com/contentauth/c2pa-node-v2/issues"
+    "url": "https://github.com/stabilityprotocol/c2pa-node-v2/issues"
   },
-  "homepage": "https://github.com/contentauth/c2pa-node-v2#readme",
+  "homepage": "https://github.com/stabilityprotocol/c2pa-node-v2#readme",
   "dependencies": {
     "cargo-cp-artifact": "^0.1.9",
     "cli-progress": "^3.12.0",

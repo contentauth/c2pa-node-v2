@@ -21,19 +21,19 @@ If you need to manage multiple versions of Node on your machine, use a tool such
 Using npm:
 
 ```sh
-$ npm install @contentauth/c2pa-node
+$ npm install @stabilityprotocol/c2pa-node
 ```
 
 Using Yarn:
 
 ```sh
-$ yarn add @contentauth/c2pa-node
+$ yarn add @stabilityprotocol/c2pa-node
 ```
 
 Using pnpm:
 
 ```sh
-$ pnpm add @contentauth/c2pa-node
+$ pnpm add @stabilityprotocol/c2pa-node
 ```
 
 This command will download precompiled binaries for the following systems:
@@ -47,7 +47,7 @@ This command will download precompiled binaries for the following systems:
 
 ## Documentation
 
-Complete API documentation is generated from TypeScript source using [TypeDoc](https://typedoc.org/) and published to GitHub Pages at [https://contentauth.github.io/c2pa-node-v2/](https://contentauth.github.io/c2pa-node-v2/).
+Complete API documentation is generated from TypeScript source using [TypeDoc](https://typedoc.org/) and published to GitHub Pages at [https://stabilityprotocol.github.io/c2pa-node-v2/](https://stabilityprotocol.github.io/c2pa-node-v2/).
 
 To generate documentation locally:
 
@@ -64,7 +64,7 @@ This generates HTML documentation in the `docs/` directory. The `docs/` director
 The `Reader` class is used to read and validate C2PA manifests from media files. It can parse embedded manifests or fetch remote manifests. Refer to the [Rust SDK](https://github.com/contentauth/c2pa-rs) for the list of settings and their effects.
 
 ```javascript
-import { Reader } from '@contentauth/c2pa-node';
+import { Reader } from '@stabilityprotocol/c2pa-node';
 
 // Read from an asset file
 const reader = await Reader.fromAsset(inputAsset);
@@ -99,7 +99,7 @@ const remoteUrl = reader.remoteUrl();
 The `Builder` class is the main component for creating and signing C2PA manifests. It provides methods to add assertions, resources, and ingredients to manifests, and handles the signing process. Use the `Signer` class to sign the manifests. Refer to the [Rust SDK](https://github.com/contentauth/c2pa-rs) for the list of settings and their effects.
 
 ```javascript
-import { Builder } from '@contentauth/c2pa-node';
+import { Builder } from '@stabilityprotocol/c2pa-node';
 
 // Create a new builder
 const builder = Builder.new();
@@ -265,7 +265,7 @@ There are two types of archives sharing the same binary format:
 ##### Reading an archive and adding its ingredients
 
 ```javascript
-import { Reader, Builder } from '@contentauth/c2pa-node';
+import { Reader, Builder } from '@stabilityprotocol/c2pa-node';
 import * as fs from 'node:fs/promises';
 
 // Read the archive using the application/c2pa MIME type
@@ -419,7 +419,7 @@ same digest and the manifest validates.
 
 ```javascript
 import * as crypto from 'node:crypto';
-import { Builder, LocalSigner } from '@contentauth/c2pa-node';
+import { Builder, LocalSigner } from '@stabilityprotocol/c2pa-node';
 
 const signer = LocalSigner.newSigner(cert, key, 'es256');
 
@@ -463,7 +463,7 @@ The library provides several types of signers for different use cases:
 For local signing with certificates and private keys:
 
 ```javascript
-import { LocalSigner } from '@contentauth/c2pa-node';
+import { LocalSigner } from '@stabilityprotocol/c2pa-node';
 
 // Create a local signer with certificate and private key
 const signer = LocalSigner.newSigner(
@@ -482,7 +482,7 @@ const signature = signer.sign(dataBuffer);
 For custom signing implementations using callbacks:
 
 ```javascript
-import { CallbackSigner } from '@contentauth/c2pa-node';
+import { CallbackSigner } from '@stabilityprotocol/c2pa-node';
 
 // Create a callback signer
 const signer = CallbackSigner.newSigner(
@@ -508,7 +508,7 @@ For working with identity assertions and CAWG (Content Authenticity Working Grou
 Builds identity assertions with roles and referenced assertions:
 
 ```javascript
-import { IdentityAssertionBuilder, CallbackCredentialHolder } from '@contentauth/c2pa-node';
+import { IdentityAssertionBuilder, CallbackCredentialHolder } from '@stabilityprotocol/c2pa-node';
 
 // Create a credential holder
 const credentialHolder = CallbackCredentialHolder.newCallbackCredentialHolder(
@@ -535,7 +535,7 @@ identityBuilder.addReferencedAssertions(['c2pa.actions']);
 Signs manifests with identity assertions:
 
 ```javascript
-import { IdentityAssertionSigner } from '@contentauth/c2pa-node';
+import { IdentityAssertionSigner } from '@stabilityprotocol/c2pa-node';
 
 // Create an identity assertion signer
 const identitySigner = IdentityAssertionSigner.new(callbackSigner);
@@ -552,7 +552,7 @@ const manifest = await builder.signAsync(identitySigner, inputAsset, outputAsset
 The `Trustmark` class provides functionality for encoding and decoding trustmarks in images:
 
 ```javascript
-import { Trustmark } from '@contentauth/c2pa-node';
+import { Trustmark } from '@stabilityprotocol/c2pa-node';
 
 // Create a trustmark instance
 const trustmark = await Trustmark.newTrustmark({
@@ -579,7 +579,7 @@ The library provides comprehensive settings management that can be configured pe
 Settings can be passed directly to `Reader` and `Builder` constructors:
 
 ```javascript
-import { Reader, Builder } from '@contentauth/c2pa-node';
+import { Reader, Builder } from '@stabilityprotocol/c2pa-node';
 
 // Create settings object
 const settings = {
@@ -619,7 +619,7 @@ import {
   settingsToJson,
   loadSettingsFromFile,
   loadSettingsFromUrl
-} from '@contentauth/c2pa-node';
+} from '@stabilityprotocol/c2pa-node';
 
 // Create trust settings
 const trustSettings = createTrustSettings({
