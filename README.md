@@ -1,6 +1,7 @@
 # C2PA Node.js library
 
 The [c2pa-node-v2](https://github.com/contentauth/c2pa-node-v2) repository implements a Node.js API that can:
+
 - Read and validate C2PA data from media files in supported formats.
 - Add signed manifests to media files in supported formats.
 
@@ -9,6 +10,7 @@ The [c2pa-node-v2](https://github.com/contentauth/c2pa-node-v2) repository imple
 ## Prerequisites
 
 To use the C2PA Node library, you must install:
+
 - A [supported version of Node](https://github.com/neon-bindings/neon#platform-support).
 - [Rust](https://www.rust-lang.org/tools/install).
 
