@@ -6,7 +6,7 @@
 
 # C2PA Node.js library
 
-The [c2pa-js](https://github.com/contentauth/c2pa-js) monorepo implements a Node.js API that can:
+The [c2pa-node-v2](https://github.com/contentauth/c2pa-node-v2) repository implements a Node.js API that can:
 - Read and validate C2PA data from media files in supported formats.
 - Add signed manifests to media files in supported formats.
 
@@ -53,7 +53,7 @@ This command will download precompiled binaries for the following systems:
 
 ## Documentation
 
-Complete API documentation is generated from TypeScript source using [TypeDoc](https://typedoc.org/) and published to GitHub Pages at [https://contentauth.github.io/c2pa-js/](https://contentauth.github.io/c2pa-js/).
+Complete API documentation is generated from TypeScript source using [TypeDoc](https://typedoc.org/) and published to GitHub Pages at [https://contentauth.github.io/c2pa-node-v2/](https://contentauth.github.io/c2pa-node-v2/).
 
 To generate documentation locally:
 
