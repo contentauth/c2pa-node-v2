@@ -1,3 +1,9 @@
+> [!WARNING]
+> **This repository has been archived.** 
+> Development of `@contentauth/c2pa-node` continues in the [contentauth/c2pa-js](https://github.com/contentauth/c2pa-js)
+> monorepo under [`packages/c2pa-node`](https://github.com/contentauth/c2pa-js/tree/main/packages/c2pa-node).
+> Please use the package from that repository going forward, and file new issues and submit pull requests from there.
+
 # C2PA Node.js library
 
 The [c2pa-node-v2](https://github.com/contentauth/c2pa-node-v2) repository implements a Node.js API that can:
